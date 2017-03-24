@@ -28,7 +28,7 @@ public class HolidayController {
 	public List<Holiday> list() {
 		return holidayService.list();
 	}
-
+  
 	@GetMapping("/{id}")
 	public Holiday findById(@PathVariable("id") Long id) {
 		return holidayService.findById(id);
