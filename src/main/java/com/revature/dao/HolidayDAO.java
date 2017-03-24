@@ -63,10 +63,10 @@ public class HolidayDAO {
 		return list;
 	}
 
-	public void delete(Long holidayId) {
+	public void delete(Long id) {
 
-		String sql = "DELETE FROM HOLIDAYS WHERE ID= ? ";
-		int rows = jdbcTemplate.update(sql, holidayId);
+		String sql = "UPDATE FROM HOLIDAYS SET ACTIVE=0 WHERE ID= ? ";
+		int rows = jdbcTemplate.update(sql, id);
 		System.out.println("No of rows deleted:" + rows);
 
 	}
