@@ -22,9 +22,9 @@ public class RoleService {
 
 	}
 
-	public void insert(Role role) {
+	public void save(Role role) {
 
-		roleDAO.insert(role);
+		roleDAO.save(role);
 	}
 
 	public void delete(Long roleId) {

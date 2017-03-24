@@ -55,7 +55,7 @@ public class RoleDAO {
 		return list;
 	}
 
-	public void insert(Role role) {
+	public void save(Role role) {
 
 		String sql = "INSERT INTO ROLE ( ROLE_CODE , ROLE_NAME,LEVEL,CREATED_DATE,MODIFIED_DATE)"
 				+ "VALUES ( ?, ?,?,NOW(),NOW())";
