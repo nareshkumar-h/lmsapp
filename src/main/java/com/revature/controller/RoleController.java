@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revature.model.Holiday;
 import com.revature.model.Role;
-import com.revature.service.HolidayService;
 import com.revature.service.RoleService;
 
 @CrossOrigin
