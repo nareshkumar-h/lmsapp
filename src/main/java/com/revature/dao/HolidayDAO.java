@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.revature.model.Holiday;
 
-@Repository
+@Repository  
 public class HolidayDAO {
 
 	@Autowired
