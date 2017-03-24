@@ -13,39 +13,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revature.model.Employee;
 import com.revature.model.Holiday;
-import com.revature.service.EmployeeService;
+import com.revature.model.Role;
+import com.revature.service.HolidayService;
+import com.revature.service.RoleService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("employees")
-public class EmployeeController {
+@RequestMapping("/roles")
+public class RoleController {
 
 	@Autowired
-	EmployeeService employeeService;
+	private RoleService roleService;
 
-	@GetMapping("/")
-	public List<Employee> list() {
-
-		List<Employee> list = employeeService.list();
-		return list;
-
+	@GetMapping
+	public List<Role> list() {
+		return roleService.list();
 	}
 
 	@GetMapping("/{id}")
-	public Employee findById(@PathVariable("id") Long id) {
-		return employeeService.findById(id);
+	public Role findById(@PathVariable("id") Long id) {
+		return roleService.findById(id);
+	}
+
+	@PostMapping
+	public void save(@RequestBody Role role) {
+		roleService.save(role);
 	}
 
 	@PutMapping
-	public void update(@RequestBody Employee employee) {
-		employeeService.update(employee);
+	public void update(@RequestBody Role role) {
+		roleService.update(role);
 	}
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable("id") Long id) {
-		employeeService.delete(id);
+		roleService.delete(id);
 	}
-
 }
