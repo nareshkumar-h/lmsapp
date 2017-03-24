@@ -14,7 +14,7 @@ import com.revature.model.Role;
 
 @Repository
 public class EmployeeDAO {
-	
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -182,8 +182,6 @@ public class EmployeeDAO {
 
 		System.out.println("No of rows Changed:" + rows);
 
-}
-	
-	
+	}
 
 }
