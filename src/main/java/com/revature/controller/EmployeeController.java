@@ -2,10 +2,10 @@ package com.revature.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.ModelMap;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.model.Employee;
-import com.revature.model.Role;
+
 import com.revature.service.EmployeeService;
 
 @CrossOrigin
@@ -39,42 +39,26 @@ public class EmployeeController {
 	
 	
 	@PostMapping("/login")
-	public String login(@RequestParam("code") String code, @RequestParam("password") String password,
-			ModelMap modelMap, HttpSession session) {
-		System.out.println("EmployeeController->login");
+	public Employee login(@RequestParam("code") String code, @RequestParam("password") String password) {
+		
 
 		Employee employee=employeeService.findByCodeAndPassword(code, password);
 		if (employee != null) {
-			session.setAttribute("LOGGED_IN_USER",employee);
-
-			return "success";
+			return employee;
 		} else {
-			modelMap.addAttribute("ERROR_MESSAGE", "Invalid EmployeeCode/Password");
-			return "index";
+			
+			return null;
 		}
 }
 	
 	@PostMapping("/RegisterEmployee")
-	public void register(@RequestParam("code") String code, @RequestParam("name") String name,
-			@RequestParam("gender") String gender, @RequestParam("role") Long role,
-			@RequestParam("emailId") String emailId, @RequestParam("password") String password,
-			@RequestParam("mobileNo") Long mobileNo, ModelMap modelMap, HttpSession session) throws Exception {
+	public void register(@RequestBody Employee employee) throws Exception {
 
 	
-			Employee emp = new Employee();
-			emp.setCode(code);
-			emp.setName(name);
-			emp.setGender(gender);
-			emp.setEmailId(emailId);
-			emp.setPassword(password);
-			emp.setMobileNo(mobileNo);
-
-			Role r = new Role();
-			r.setId(role); 
-			emp.setRole(r);
+			
 			
 
-			employeeService.register(emp);
+			employeeService.register(employee);
 
 			
 
