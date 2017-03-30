@@ -5,7 +5,8 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,23 +40,19 @@ public class EmployeeController {
 	
 	
 	@PostMapping("/login")
-	public Employee login(@RequestParam("code") String code, @RequestParam("password") String password) {
+	public ResponseEntity<Employee> login(@RequestParam("code") String code, @RequestParam("password") String password) {
 		
 
 		Employee employee=employeeService.findByCodeAndPassword(code, password);
-		if (employee != null) {
-			return employee;
-		} else {
-			
-			return null;
+		if (employee != null && employee.getPassword().equals(password)) {
+			return new ResponseEntity<Employee>(employee,HttpStatus.OK);
+		} else {			
+			return new ResponseEntity<Employee>(employee,HttpStatus.BAD_REQUEST);
 		}
 }
 	
-	@PostMapping("/RegisterEmployee")
-	public void register(@RequestBody Employee employee) throws Exception {
-
-	
-			
+	@PostMapping
+	public void register(@RequestBody Employee employee) throws Exception {		
 			
 
 			employeeService.register(employee);
