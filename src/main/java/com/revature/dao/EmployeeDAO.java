@@ -52,14 +52,14 @@ public class EmployeeDAO {
 		return emp;
 	}
 
-	public Employee findByCodeAndPassword(String code, String password) {
+	public Employee findByEmailIdAndPassword(String emailId, String password) {
 
-		String sql = "SELECT e.ID, e.CODE, NAME, ROLE_ID , ROLE_CODE, ROLE_NAME, EMAIL_ID, MOBILE_NO,GENDER, e.ACTIVE, e.CREATED_DATE, e.MODIFIED_DATE FROM EMPLOYEES e, ROLE r WHERE e.ROLE_ID = r.ID AND e.CODE = ? AND PASSWORD=? ";
+		String sql = "SELECT e.ID, e.CODE, NAME, ROLE_ID , ROLE_CODE, ROLE_NAME, EMAIL_ID, MOBILE_NO,GENDER, e.ACTIVE, e.CREATED_DATE, e.MODIFIED_DATE FROM EMPLOYEES e, ROLE r WHERE e.ROLE_ID = r.ID AND e.EMAIL_ID = ? AND PASSWORD=? ";
 
 		Employee employee = null;
 
 		try {
-			employee = jdbcTemplate.queryForObject(sql, new Object[] { code, password }, (rs, rowNum) -> {
+			employee = jdbcTemplate.queryForObject(sql, new Object[] { emailId, password }, (rs, rowNum) -> {
 
 				return convert(rs);
 
