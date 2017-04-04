@@ -2,11 +2,14 @@ package com.revature.service;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.revature.dao.LeaveDetailDAO;
 import com.revature.model.LeaveDetail;
 
+@Service
 public class LeaveDetailService {
 	
 	@Autowired

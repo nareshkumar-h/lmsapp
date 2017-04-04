@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.revature.model.Employee;
 import com.revature.model.LeaveDetail;
 import com.revature.model.LeaveStatus;
 import com.revature.model.LeaveType;
 
+@Repository
 public class LeaveDetailDAO {
 	
 	@Autowired
