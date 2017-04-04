@@ -2,6 +2,8 @@ package com.revature.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -34,10 +36,10 @@ public class Employee {
 	
 	private boolean active;
 
-	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate createdDate;
 
-	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")	
 private LocalDate modifiedDate;
 	
 	

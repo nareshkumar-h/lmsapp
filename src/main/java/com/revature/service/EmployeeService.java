@@ -15,7 +15,7 @@ public class EmployeeService {
 	@Autowired
 	private EmployeeDAO employeeDAO;
 
-	public Employee findByCodeAndPassword(String emailId, String password) {
+	public Employee findByEmailIdAndPassword(String emailId, String password) {
 
 		return employeeDAO.findByEmailIdAndPassword(emailId, password);
 	}

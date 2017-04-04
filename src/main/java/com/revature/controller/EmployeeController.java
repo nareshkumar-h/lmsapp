@@ -43,7 +43,7 @@ public class EmployeeController {
 	public ResponseEntity<Employee> login(@RequestParam("emailId") String emailId, @RequestParam("password") String password) {
 		
 
-		Employee employee=employeeService.findByCodeAndPassword(emailId, password);
+		Employee employee=employeeService.findByEmailIdAndPassword(emailId, password);
 		if (employee != null && employee.getPassword().equals(password)) {
 			return new ResponseEntity<Employee>(employee,HttpStatus.OK);
 		} else {			
