@@ -53,15 +53,39 @@ public class EmployeeDAO {
 	}
 
 	public Employee findByEmailIdAndPassword(String emailId, String password) {
+		
+		
 
-		String sql = "SELECT e.ID, e.CODE, NAME, ROLE_ID , ROLE_CODE, ROLE_NAME, EMAIL_ID, MOBILE_NO,GENDER, e.ACTIVE, e.CREATED_DATE, e.MODIFIED_DATE FROM EMPLOYEES e, ROLE r WHERE e.ROLE_ID = r.ID AND e.EMAIL_ID = ? AND PASSWORD=? ";
+		String sql = "SELECT e.ID, e.CODE, e.NAME,e.password, ROLE_ID , ROLE_CODE, ROLE_NAME, EMAIL_ID, MOBILE_NO,GENDER, e.ACTIVE, e.CREATED_DATE, e.MODIFIED_DATE FROM EMPLOYEES e, ROLE r WHERE e.ROLE_ID = r.ID AND e.EMAIL_ID = ? AND PASSWORD=? ";
 
 		Employee employee = null;
 
 		try {
+			
+			
 			employee = jdbcTemplate.queryForObject(sql, new Object[] { emailId, password }, (rs, rowNum) -> {
+				
+				
+				Employee emp=new Employee();
+				emp.setId(rs.getLong("ID"));
+				emp.setCode(rs.getString("CODE"));
+				emp.setName(rs.getString("NAME"));
+				emp.setPassword(rs.getString("password"));
+				emp.setEmailId(rs.getString("EMAIL_ID"));
+				emp.setMobileNo(rs.getLong("MOBILE_NO"));
+				emp.setGender(rs.getString("GENDER"));
+				emp.setActive(rs.getBoolean("ACTIVE"));
+				emp.setCreatedDate(rs.getDate("CREATED_DATE").toLocalDate());
+				emp.setModifiedDate(rs.getDate("MODIFIED_DATE").toLocalDate());
 
-				return convert(rs);
+				Role r = new Role();
+				r.setId(rs.getLong("ROLE_ID"));
+				r.setCode(rs.getString("ROLE_CODE"));
+				r.setName(rs.getString("ROLE_NAME"));
+
+				emp.setRole(r);
+
+				return emp;
 
 			});
 		} catch (EmptyResultDataAccessException e) {
