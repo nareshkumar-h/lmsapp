@@ -117,7 +117,7 @@ public class EmployeeDAO {
 		int rows = jdbcTemplate.update(sql, emp.getCode(), emp.getName(), emp.getEmailId(), emp.getMobileNo(),
 				emp.getRole().getId(), emp.getPassword(), emp.getGender());
 
-		System.out.println("No of rows Register:" + rows);
+		
 	}
 
 	public List<Employee> list() {
@@ -138,7 +138,7 @@ public class EmployeeDAO {
 		Integer rows = jdbcTemplate.update(sql, emp1.getCode(), emp1.getName(), emp1.getRole().getId(),
 				emp1.getEmailId(), emp1.getMobileNo(), emp1.getId());
 
-		System.out.println("No of rows Changed:" + rows);
+		
 
 	}
 
@@ -152,7 +152,7 @@ public class EmployeeDAO {
 			isModified = true;
 		}
 
-		System.out.println("No of rows Changed:" + rows);
+		
 		return isModified;
 	}
 
@@ -162,7 +162,7 @@ public class EmployeeDAO {
 				+ "VALUES(?, ?, ?,NOW())";
 		Integer rows = jdbcTemplate.update(sql, empId, oldPassword, newPassword);
 
-		System.out.println("No of rows Changed:" + rows);
+		
 
 	}
 
@@ -193,7 +193,7 @@ public class EmployeeDAO {
 
 		String sql = "DELETE FROM EMPLOYEES WHERE ID= ? ";
 		int rows = jdbcTemplate.update(sql, empId);
-		System.out.println("No of rows deleted:" + rows);
+		
 
 	}
 
@@ -204,7 +204,7 @@ public class EmployeeDAO {
 		Integer rows = jdbcTemplate.update(sql, emp1.getCode(), emp1.getName(), emp1.getRole().getId(),
 				emp1.getEmailId(), emp1.getMobileNo(), emp1.getId());
 
-		System.out.println("No of rows Changed:" + rows);
+		
 
 	}
 

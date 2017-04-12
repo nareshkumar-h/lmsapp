@@ -24,13 +24,13 @@ public class LeaveDetailsController {
 	private LeaveDetailService leaveDetailService;
 	
 	
-	@PostMapping("/save")
+	@PostMapping
 	public void save(@RequestBody LeaveDetail leaveDetail) {
 
 		leaveDetailService.save(leaveDetail);
 	}
 
-	@PutMapping("/update")
+	@PutMapping
 	public void update(@RequestBody LeaveDetail leaveDetail) {
 
 		leaveDetailService.update(leaveDetail);

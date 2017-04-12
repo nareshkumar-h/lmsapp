@@ -45,6 +45,7 @@ public class EmployeeController {
 
 		Employee employee=employeeService.findByEmailIdAndPassword(emailId, password);
 		if (employee != null && employee.getPassword().equals(password)) {
+			employee.setPassword(null);
 			return new ResponseEntity<Employee>(employee,HttpStatus.OK);
 		} else {			
 			return new ResponseEntity<Employee>(employee,HttpStatus.BAD_REQUEST);
