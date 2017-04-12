@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.revature.util.CustomJsonDateDeserializer;
 
 import lombok.Data;
 
@@ -17,14 +19,17 @@ public class LeaveDetail {
 	private LeaveType leaveType;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonDeserialize(using=CustomJsonDateDeserializer.class)
 	private LocalDate fromDate;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonDeserialize(using=CustomJsonDateDeserializer.class)
 	private LocalDate toDate;
 	
 	private Float noOfDays;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonDeserialize(using=CustomJsonDateDeserializer.class)
 	private LocalDate appliedDate;
 	
 	private Employee modifiedBy;
@@ -32,6 +37,7 @@ public class LeaveDetail {
 	private LeaveStatus status;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonDeserialize(using=CustomJsonDateDeserializer.class)
     private LocalDate modifiedDate;
 	
 	
