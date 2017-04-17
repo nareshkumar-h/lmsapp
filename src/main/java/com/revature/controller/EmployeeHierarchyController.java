@@ -12,7 +12,7 @@ import com.revature.service.EmployeeHierarchyService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/employeeHierarchy")
+@RequestMapping("/employees/hierarchy")
 public class EmployeeHierarchyController {
 	
 	@Autowired

@@ -28,5 +28,9 @@ public class LeaveDetailService {
 
 		return leavedetaildao.list(empId);
 }
+	public List<LeaveDetail> teamRequests(Long mgrId) {
+
+		return leavedetaildao.teamRequests(mgrId);
+}
 
 }

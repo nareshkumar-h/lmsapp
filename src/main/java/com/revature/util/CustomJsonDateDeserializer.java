@@ -21,7 +21,7 @@ public class CustomJsonDateDeserializer extends JsonDeserializer<LocalDate> {
 
 	    String date = jsonparser.getText();
 	    String[] dateTimeArray = date.split(" ");
-	    String[] dateArray = dateTimeArray[0].split("-");
+	    String[] dateArray = dateTimeArray[0].split("/");
 
 	    int day = Integer.parseInt(dateArray[0]);
 	    int month = Integer.parseInt(dateArray[1]);

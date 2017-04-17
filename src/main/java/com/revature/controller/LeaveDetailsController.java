@@ -19,11 +19,10 @@ import com.revature.service.LeaveDetailService;
 @RestController
 @RequestMapping("/leavedetails")
 public class LeaveDetailsController {
-	
+
 	@Autowired
 	private LeaveDetailService leaveDetailService;
-	
-	
+
 	@PostMapping
 	public void save(@RequestBody LeaveDetail leaveDetail) {
 
@@ -39,6 +38,9 @@ public class LeaveDetailsController {
 	@GetMapping("/{id}")
 	public List<LeaveDetail> list(@PathVariable Long id) {
 		return leaveDetailService.list(id);
-}
-
+	}
+	@GetMapping("manager/{id}")
+	public List<LeaveDetail> requests(@PathVariable Long id) {
+		return leaveDetailService.teamRequests(id);
+	}
 }

@@ -127,6 +127,7 @@ public class EmployeeDAO {
 		List<Employee> list = jdbcTemplate.query(sql, new Object[] {}, (rs, rowNum) -> {
 			return convert(rs);
 		});
+		list.remove(0);
 		return list;
 
 	}
