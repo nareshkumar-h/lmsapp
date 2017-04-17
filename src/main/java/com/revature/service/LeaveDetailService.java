@@ -1,7 +1,7 @@
 package com.revature.service;
 
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,10 @@ public class LeaveDetailService {
 	public List<LeaveDetail> list(Long empId) {
 
 		return leavedetaildao.list(empId);
+}
+	public Map<String,Double> calculateRemainingDays(Long empId) {
+
+		return leavedetaildao.calculateRemainingDays(empId);
 }
 	public List<LeaveDetail> teamRequests(Long mgrId) {
 

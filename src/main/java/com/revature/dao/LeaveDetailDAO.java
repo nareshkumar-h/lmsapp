@@ -1,5 +1,7 @@
 package com.revature.dao;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +41,59 @@ public class LeaveDetailDAO {
 		
 
 }
-	
+	public Map<String, Double> calculateRemainingDays(Long empId){
+		
+		Map<String,Double>remainingDays=new HashMap<>();
+		
+		double totCL=0,noCL=0,remCL=0;
+		double totPL=0,noPL=0,remPL=0;
+		double totSL=0,noSL=0,remSL=0;
+		double totMATL=0,noMATL=0,remMATL=0;
+		double totPATL=0,noPATL=0,remPATL=0;
+		double totPRL=0,noPRL=0,remPRL=0;
+		
+		totSL=(Double)jdbcTemplate.queryForObject("SELECT SICK_LEAVE FROM ROLE_LEAVES WHERE ROLE_ID=(SELECT ROLE_ID FROM EMPLOYEES WHERE ID=?)", new Object[]{empId},Double.class);
+		totCL=(Double)jdbcTemplate.queryForObject("SELECT CASUAL_LEAVE FROM ROLE_LEAVES WHERE ROLE_ID=(SELECT ROLE_ID FROM EMPLOYEES WHERE ID=?)", new Object[]{empId},Double.class);
+		totPL=(Double)jdbcTemplate.queryForObject("SELECT PAID_LEAVE FROM ROLE_LEAVES WHERE ROLE_ID=(SELECT ROLE_ID FROM EMPLOYEES WHERE ID=?)", new Object[]{empId},Double.class);
+		totMATL=(Double)jdbcTemplate.queryForObject("SELECT MATERNITY_LEAVE FROM ROLE_LEAVES WHERE ROLE_ID=(SELECT ROLE_ID FROM EMPLOYEES WHERE ID=?)", new Object[]{empId},Double.class);
+		totPATL=(Double)jdbcTemplate.queryForObject("SELECT PATERNITY_LEAVE FROM ROLE_LEAVES WHERE ROLE_ID=(SELECT ROLE_ID FROM EMPLOYEES WHERE ID=?)", new Object[]{empId},Double.class);
+		totPRL=(Double)jdbcTemplate.queryForObject("SELECT PRIVILEGED_LEAVE FROM ROLE_LEAVES WHERE ROLE_ID=(SELECT ROLE_ID FROM EMPLOYEES WHERE ID=?)", new Object[]{empId},Double.class);
+		
+		noCL=getUsedDays(empId,1);
+		noSL=getUsedDays(empId,2);
+		noPL=getUsedDays(empId,3);
+		noMATL=getUsedDays(empId,4);
+		noPATL=getUsedDays(empId,5);
+		noPRL=getUsedDays(empId,6);
+		
+		remCL=totCL-noCL;
+		remSL=totSL-noSL;
+		remPL=totPL-noPL;
+		remPATL=totPATL-noPATL;
+		remMATL=totMATL-noMATL;
+		remPRL=totPRL-noPRL;
+		
+		remainingDays.put("casual_leave", remCL);
+		remainingDays.put("sick_leave", remSL);
+		remainingDays.put("paid_leave", remPL);
+		remainingDays.put("maternity_leave", remMATL);
+		remainingDays.put("paternity_leave", remPATL);
+		remainingDays.put("privileged_leave", remPRL);
+		
+		return remainingDays;
+		
+	}
+	private double getUsedDays(Long empId,int leaveTypeId){
+		double days=0;
+		String temp="SELECT NO_OF_DAYS FROM EMPLOYEE_LEAVE_DETAILS WHERE EMP_ID=? AND LEAVE_TYPE=? AND (STATUS_ID=? OR STATUS_ID=?)";
+		List<Map<String, Object>>rows=jdbcTemplate.queryForList(temp,new Object[]{empId,leaveTypeId,1,2});
+		for(Map row:rows){
+			double day=((BigDecimal)row.get("NO_OF_DAYS")).floatValue();
+			days+=day;
+			
+		}
+		return days;
+	}
 	public List<LeaveDetail> list(Long empId) {
 
 		String sql = "SELECT e.NAME, ld.ID, ld.EMP_ID, FROM_DATE,TO_DATE, NO_OF_DAYS, LEAVE_TYPE AS LEAVE_TYPE_ID, ( SELECT LEAVE_TYPE FROM LEAVE_TYPES WHERE ID = ld.LEAVE_TYPE) LEAVE_TYPE , STATUS_ID, ( SELECT CODE FROM LEAVE_STATUS WHERE ID = STATUS_ID ) LEAVE_STATUS, ld.APPLIED_DATE, ld.MODIFIED_BY, ld.MODIFIED_DATE FROM EMPLOYEE_LEAVE_DETAILS ld , EMPLOYEES e WHERE ld.EMP_ID = e.ID AND EMP_ID= ? ";
@@ -91,44 +145,10 @@ public class LeaveDetailDAO {
 			System.out.println(employee);
 			emps.add(employee);
 		}
-		for(int empId:emps)
-		{
-		String sql = "SELECT e.NAME, ld.ID, ld.EMP_ID, FROM_DATE,TO_DATE, NO_OF_DAYS, LEAVE_TYPE AS LEAVE_TYPE_ID, ( SELECT LEAVE_TYPE FROM LEAVE_TYPES WHERE ID = ld.LEAVE_TYPE) LEAVE_TYPE , STATUS_ID, ( SELECT CODE FROM LEAVE_STATUS WHERE ID = STATUS_ID ) LEAVE_STATUS, ld.APPLIED_DATE, ld.MODIFIED_BY, ld.MODIFIED_DATE FROM EMPLOYEE_LEAVE_DETAILS ld , EMPLOYEES e WHERE ld.EMP_ID = e.ID AND EMP_ID= ? ";
-
-		// List<LeaveDetail> list = jdbcTemplate.query(sql, new Object[] { empId
-		// }, new LeaveDetailRowMapper());
-
-			List<LeaveDetail>templist = jdbcTemplate.query(sql, new Object[] { empId }, (rs, rowNo) -> {
-			Employee emp = new Employee();
-			
-			emp.setId(rs.getLong("EMP_ID"));
-			emp.setName(rs.getString("NAME"));
-			
-			Employee modifiedBy = new Employee();
-			modifiedBy.setId(rs.getLong("MODIFIED_BY"));
-
-			LeaveStatus ls = new LeaveStatus();
-			ls.setId(rs.getLong("STATUS_ID"));
-			ls.setStatus(rs.getString("LEAVE_STATUS"));
-
-			LeaveType lt = new LeaveType();
-			lt.setId(rs.getLong("LEAVE_TYPE_ID"));
-			lt.setType(rs.getString("LEAVE_TYPE"));
-
-			LeaveDetail ld = new LeaveDetail();
-			ld.setId(rs.getLong("ID"));
-			ld.setEmployee(emp);
-			ld.setFromDate(rs.getDate("FROM_DATE").toLocalDate());
-			ld.setToDate(rs.getDate("TO_DATE").toLocalDate());
-			ld.setNoOfDays(rs.getFloat("NO_OF_DAYS"));
-			ld.setLeaveType(lt);
-			ld.setStatus(ls);
-			ld.setAppliedDate(rs.getDate("APPLIED_DATE").toLocalDate());
-			ld.setModifiedBy(modifiedBy);
-			ld.setModifiedDate(rs.getDate("MODIFIED_DATE").toLocalDate());
-			return ld;
-		});
-		for(LeaveDetail tld:templist){
+		for(long empId:emps)
+		{		
+			List<LeaveDetail>templist=list(empId);
+			for(LeaveDetail tld:templist){
 			list.add(tld);
 		}
 		}

@@ -1,6 +1,7 @@
 package com.revature.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -42,5 +43,9 @@ public class LeaveDetailsController {
 	@GetMapping("manager/{id}")
 	public List<LeaveDetail> requests(@PathVariable Long id) {
 		return leaveDetailService.teamRequests(id);
+	}
+	@GetMapping("balance/{id}")
+	public Map<String, Double> remaingdays(@PathVariable Long id) {
+		return leaveDetailService.calculateRemainingDays(id);
 	}
 }
