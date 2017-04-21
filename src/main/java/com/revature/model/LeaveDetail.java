@@ -40,6 +40,8 @@ public class LeaveDetail {
 	@JsonDeserialize(using=CustomJsonDateDeserializer.class)
     private LocalDate modifiedDate;
 	
+	private String purpose;
+	
 	
 
 }

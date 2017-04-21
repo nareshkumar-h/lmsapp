@@ -72,6 +72,10 @@ public class EmployeeController {
 	public void update(@RequestBody Employee employee) {
 		employeeService.update(employee);
 	}
+	@PostMapping ("/password")
+	public void updatePassword(@RequestParam("emailId") String emailId, @RequestParam("oldPassword") String oldPassword,@RequestParam("newPassword") String newPassword) {
+		employeeService.changePassword(emailId, oldPassword, newPassword);
+	}
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable("id") Long id) {

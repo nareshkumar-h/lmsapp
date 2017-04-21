@@ -2,11 +2,17 @@ package com.revature.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
 import com.revature.model.Employee;
@@ -111,23 +117,43 @@ public class EmployeeDAO {
 
 	public void registerEmployee(Employee emp) {
 
-		String sql = "INSERT INTO EMPLOYEES ( CODE , NAME, EMAIL_ID, MOBILE_NO, ROLE_ID,PASSWORD,GENDER,CREATED_DATE,MODIFIED_DATE )"
+/*		String sql = "INSERT INTO EMPLOYEES ( CODE , NAME, EMAIL_ID, MOBILE_NO, ROLE_ID,PASSWORD,GENDER,CREATED_DATE,MODIFIED_DATE )"
 				+ "VALUES ( ?, ?, ?, ?, ?,?,?,NOW(), NOW() )";
 
 		int rows = jdbcTemplate.update(sql, emp.getCode(), emp.getName(), emp.getEmailId(), emp.getMobileNo(),
-				emp.getRole().getId(), emp.getPassword(), emp.getGender());
+				emp.getRole().getId(), emp.getPassword(), emp.getGender());*/
+	SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
+
+				.withProcedureName("PR_SIGNUP_CALL");
+
+				Map<String, Object> inParamMap = new HashMap<String, Object>();
+				inParamMap.put("p_CODE",emp.getCode());
+				inParamMap.put("p_NAME",emp.getName());
+				inParamMap.put("p_EMAIL_ID", emp.getEmailId());
+				inParamMap.put("p_MOBILE_NO",emp.getMobileNo());
+				inParamMap.put("p_ROLE_ID",emp.getRole().getId());
+				inParamMap.put("p_PASSWORD",emp.getPassword());
+				inParamMap.put("p_GENDER",emp.getGender());
+				inParamMap.put("p_CREATED_DATE",LocalDate.now());
+				inParamMap.put("p_MODIFIED_DATE",LocalDate.now());
+				SqlParameterSource in = new MapSqlParameterSource(inParamMap);
+
+
+				Map<String, Object> simpleJdbcCallResult = simpleJdbcCall.execute(in);
+				System.out.println(simpleJdbcCallResult);
+				
 
 		
 	}
 
 	public List<Employee> list() {
 
-		String sql = "SELECT e.ID, e.CODE, NAME, ROLE_ID , ROLE_CODE, ROLE_NAME, EMAIL_ID, MOBILE_NO,GENDER, e.ACTIVE, e.CREATED_DATE, e.MODIFIED_DATE FROM EMPLOYEES e, ROLE r WHERE e.ROLE_ID = r.ID";
+		String sql = "SELECT e.ID, e.CODE, NAME, ROLE_ID , ROLE_CODE, ROLE_NAME, EMAIL_ID, MOBILE_NO,GENDER, e.ACTIVE, e.CREATED_DATE, e.MODIFIED_DATE FROM EMPLOYEES e, ROLE r WHERE e.ROLE_ID = r.ID AND e.EMAIL_ID!='system@revsys.com'";
 
 		List<Employee> list = jdbcTemplate.query(sql, new Object[] {}, (rs, rowNum) -> {
 			return convert(rs);
 		});
-		list.remove(0);
+		
 		return list;
 
 	}

@@ -49,6 +49,10 @@ public class EmployeeService {
 
 		employeeDAO.registerEmployee(emp);
 }
-	
+	public boolean changePassword(String emailId,String oldPassword,String newPassword)
+	{
+		return employeeDAO.changePassword(emailId, oldPassword, newPassword);
+				
+	}
 
 }

@@ -8,6 +8,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
 import com.revature.model.Employee;
@@ -20,17 +23,38 @@ public class LeaveDetailDAO {
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	@Autowired
+	private EmployeeDAO employeeDAO;
 	
 	
 	public void applyLeave(LeaveDetail ld) {
 
-		String sql = "INSERT INTO EMPLOYEE_LEAVE_DETAILS ( EMP_ID , FROM_DATE, TO_DATE, NO_OF_DAYS, LEAVE_TYPE,  STATUS_ID, APPLIED_DATE, MODIFIED_DATE )"
-				+ "VALUES ( ?, ?, ?, ?, ?, ?, NOW(), NOW() )";
+		String sql = "INSERT INTO EMPLOYEE_LEAVE_DETAILS ( EMP_ID , FROM_DATE, TO_DATE, NO_OF_DAYS, LEAVE_TYPE,  STATUS_ID, APPLIED_DATE, MODIFIED_DATE, MODIFIED_BY,PURPOSE)"
+				+ "VALUES ( ?, ?, ?, ?, ?, ?, NOW(), NOW(),?,? )";
 
 		int rows = jdbcTemplate.update(sql, ld.getEmployee().getId(), ld.getFromDate(), ld.getToDate(),
-				ld.getNoOfDays(), ld.getLeaveType().getId(), ld.getStatus().getId());
+				ld.getNoOfDays(), ld.getLeaveType().getId(), ld.getStatus().getId(),ld.getEmployee().getId(),ld.getPurpose());
 
 	}
+	
+	/*public void applyLeave(LeaveDetail ld)
+	{
+		SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
+
+				.withProcedureName("PR_APPLY_LEAVE");
+
+				Map<String, Object> inParamMap = new HashMap<String, Object>();
+				inParamMap.put("p_eid", ld.getEmployee().getId());
+				inParamMap.put("p_from_date",ld.getFromDate());
+				inParamMap.put("p_to_date", ld.getToDate());
+				inParamMap.put("p_no_of_days",ld.getNoOfDays());
+				inParamMap.put("p_leave_type",ld.getLeaveType().getId());
+				SqlParameterSource in = new MapSqlParameterSource(inParamMap);
+
+
+				Map<String, Object> simpleJdbcCallResult = simpleJdbcCall.execute(in);
+				System.out.println(simpleJdbcCallResult);
+	}*/
 
 	public void update(LeaveDetail ld) {
 
@@ -96,7 +120,7 @@ public class LeaveDetailDAO {
 	}
 	public List<LeaveDetail> list(Long empId) {
 
-		String sql = "SELECT e.NAME, ld.ID, ld.EMP_ID, FROM_DATE,TO_DATE, NO_OF_DAYS, LEAVE_TYPE AS LEAVE_TYPE_ID, ( SELECT LEAVE_TYPE FROM LEAVE_TYPES WHERE ID = ld.LEAVE_TYPE) LEAVE_TYPE , STATUS_ID, ( SELECT CODE FROM LEAVE_STATUS WHERE ID = STATUS_ID ) LEAVE_STATUS, ld.APPLIED_DATE, ld.MODIFIED_BY, ld.MODIFIED_DATE FROM EMPLOYEE_LEAVE_DETAILS ld , EMPLOYEES e WHERE ld.EMP_ID = e.ID AND EMP_ID= ? ";
+		String sql = "SELECT e.NAME, ld.ID, ld.EMP_ID, FROM_DATE,TO_DATE, NO_OF_DAYS, LEAVE_TYPE AS LEAVE_TYPE_ID, ( SELECT LEAVE_TYPE FROM LEAVE_TYPES WHERE ID = ld.LEAVE_TYPE) LEAVE_TYPE , STATUS_ID, ( SELECT CODE FROM LEAVE_STATUS WHERE ID = STATUS_ID ) LEAVE_STATUS, ld.APPLIED_DATE, ld.MODIFIED_BY, ld.MODIFIED_DATE,ld.PURPOSE FROM EMPLOYEE_LEAVE_DETAILS ld , EMPLOYEES e WHERE ld.EMP_ID = e.ID AND EMP_ID=? order by FROM_DATE DESC";
 
 		// List<LeaveDetail> list = jdbcTemplate.query(sql, new Object[] { empId
 		// }, new LeaveDetailRowMapper());
@@ -108,7 +132,7 @@ public class LeaveDetailDAO {
 			emp.setName(rs.getString("NAME"));
 			
 			Employee modifiedBy = new Employee();
-			modifiedBy.setId(rs.getLong("MODIFIED_BY"));
+			modifiedBy=employeeDAO.findById(rs.getLong("MODIFIED_BY"));
 
 			LeaveStatus ls = new LeaveStatus();
 			ls.setId(rs.getLong("STATUS_ID"));
@@ -129,6 +153,7 @@ public class LeaveDetailDAO {
 			ld.setAppliedDate(rs.getDate("APPLIED_DATE").toLocalDate());
 			ld.setModifiedBy(modifiedBy);
 			ld.setModifiedDate(rs.getDate("MODIFIED_DATE").toLocalDate());
+			ld.setPurpose(rs.getString("PURPOSE"));
 			return ld;
 		});
 		return list;
