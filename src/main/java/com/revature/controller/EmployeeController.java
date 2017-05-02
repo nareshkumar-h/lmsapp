@@ -37,6 +37,21 @@ public class EmployeeController {
 		return list;
 
 	}
+	@GetMapping("/api")
+	public List<Employee> list2() {
+
+		List<Employee> list = employeeService.list2();
+		return list;
+
+	}
+	
+	@GetMapping("/managers")
+	public List<Employee> listManagers() {
+
+		List<Employee> list = employeeService.getManagers();
+		return list;
+
+	}
 	
 	
 	@PostMapping("/login")
@@ -44,7 +59,7 @@ public class EmployeeController {
 		
 
 		Employee employee=employeeService.findByEmailIdAndPassword(emailId, password);
-		if (employee != null && employee.getPassword().equals(password)) {
+		if (employee != null && employee.getPassword().equals(password) && employee.isActive()) {
 			employee.setPassword(null);
 			return new ResponseEntity<Employee>(employee,HttpStatus.OK);
 		} else {			

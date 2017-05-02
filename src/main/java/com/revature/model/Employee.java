@@ -38,6 +38,8 @@ public class Employee {
 
 	
 	private boolean active;
+	
+	private Employee reportPerson;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate createdDate;

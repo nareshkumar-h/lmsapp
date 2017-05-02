@@ -47,7 +47,7 @@ public class RoleDAO {
 
 	public List<Role> list() {
 
-		String sql = "SELECT ID, ROLE_CODE, ROLE_NAME,LEVEL,CREATED_DATE,MODIFIED_DATE FROM ROLE";
+		String sql = "SELECT ID, ROLE_CODE, ROLE_NAME,LEVEL,CREATED_DATE,MODIFIED_DATE FROM ROLE WHERE ID!=1";
 
 		List<Role> list = jdbcTemplate.query(sql, new Object[] {}, (rs, rowNum) -> {
 			return convert(rs);

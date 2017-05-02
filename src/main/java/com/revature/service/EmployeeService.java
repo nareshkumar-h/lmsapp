@@ -34,6 +34,16 @@ public class EmployeeService {
 
 		return employeeDAO.list();
 	}
+	
+	public List<Employee> list2() {
+
+		return employeeDAO.list2();
+	}
+	
+	public List<Employee> getManagers() {
+
+		return employeeDAO.getManagers();
+	}
 
 	public void delete(Long empId) {
 
