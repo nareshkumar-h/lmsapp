@@ -184,7 +184,7 @@ public class EmployeeDAO {
 
 	public List<Employee> list2() {
 
-		 String sql = "SELECT e.ID, e.CODE, NAME, ROLE_ID ,eh.MGR_ID, ROLE_CODE, ROLE_NAME, EMAIL_ID, MOBILE_NO,GENDER,e.ACTIVE, e.CREATED_DATE, e.MODIFIED_DATE FROM  ROLE r JOIN EMPLOYEES e ON  e.ROLE_ID = r.ID AND e.EMAIL_ID!='system@revsys.com' LEFT JOIN EMPLOYEE_HIERARCHY eh ON eh.EMP_ID=e.ID";;
+		 String sql = "SELECT e.ID, e.CODE, NAME, ROLE_ID ,eh.MGR_ID, ROLE_CODE, ROLE_NAME, EMAIL_ID, MOBILE_NO,GENDER,e.ACTIVE, e.CREATED_DATE, e.MODIFIED_DATE FROM  ROLE r JOIN EMPLOYEES e ON  e.ROLE_ID = r.ID AND e.EMAIL_ID!='system@revsys.com' LEFT JOIN EMPLOYEE_HIERARCHY eh ON eh.EMP_ID=e.ID";
 		
 		List<Employee> list = jdbcTemplate.query(sql, new Object[] {}, (rs, rowNum) -> {
 			return convert2(rs);
